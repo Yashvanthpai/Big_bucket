@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+        {% block navlinks %}
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-5">
+                        {% block register %}
+                        <a   class="btn btn-outline-dark btn-sm" style="width: 135px;" role="button" href="{% url 'login' %}">Login</a>
+                        {% endblock %}
+                        </ul>
+
+                </div>
+        {% endblock %}
+
+{% block container_block %}
+<style>
+body{
+    background-image: url("{% static 'logo.png' %}");
+    background-position:center ;
+    background-attachment: fixed;
+    background-position-y: 70px;
+    background-repeat: no-repeat;
+    
+}
+</style>
+ <div class="container-fluid mb-3" style="margin-top: 3%;">
+   <strong >
+        <form id='registerform' method="post" enctype="multipart/form-data" style="display: none;
+          width: 60%;padding:5%;
+          margin: auto; 
+          background-color: rgba(245, 245, 245, 0.603);
+          box-shadow: 0 10px 15px 0 rgba(164, 187, 252, 0.747), 0 6px 20px 0 rgba(164, 187, 252, 0.747);">
+                <h3 style="text-align: left;"><strong>Register Here</strong></h3>
+                      {% csrf_token %}
+                      {{ form1|crispy }}
+                      {{ form2|crispy }}
+                <button type="submit" class="btn btn-success">Register</button>
+        </form>
+  </strong>
+</div>
+<script>
+
+        $("#registerform").ready(function(){
+                $("#registerform").slideDown("slow");
+         })
+
+        $("#registerform").ready(function(){
+                $(".custom-file-label").remove()
+                $("input[name=profile]").removeClass("form-control custom-file-input")
+        })
+
+        $( function() {
+          $("input[name=bdate]").datepicker({
+            changeMonth: true,
+            changeYear: true
+          });
+        } );
+   
+</script>
+{% endblock %}

@@ -1,0 +1,334 @@
+{% extends 'index.html' %} {% load staticfiles %} {% load crispy_forms_tags %} {% load custemtemplates %} {% block navlinks %} {% if user.is_authenticated %}
+<form class="form-inline ml-auto mr-5" method="GET">
+    <input class="form-control mr-sm-2" type="search" style="width: 285px;height: 35px;" name="q" value="{{ request.GET.q }}" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success btn-sm" style="width: 85px;height: 30px;" type="submit">Search</button>
+</form>
+<ul class="navbar-nav " style="margin-right: 8%;">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" style="width: 80px; color: black;" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-users-cog fa-lg" style="margin-right: 10px;"></i><strong>{{user.first_name}}</strong>
+        </a>
+        <div class="dropdown-menu dropdown-menu-left " aria-labelledby="navbarDropdownMenuLink">
+            <strong>
+                                            <a class="dropdown-item" href="{% url 'password_change' %}" >Change Password</a> 
+                                            <a class="dropdown-item" href="{% url 'cart_view' %}" >Inventry View</a> 
+                                            <a class="dropdown-item" onclick="conformation()" >Logout</a>
+                                        </strong>
+        </div>
+    </li>
+</ul>
+{% endif %} {% endblock %} {% block container_block %}
+
+<style>
+    .card-content {
+        width: 95%;
+        margin: 0px;
+        margin: auto;
+        padding-bottom: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.897);
+        cursor: pointer;
+        border: 3px solid white;
+        border-radius: 3%;
+        box-shadow: 0 15px 15px 0 rgba(148, 185, 202, 0.747), 0 20px 20px 0 rgba(148, 185, 202, 0.747);
+    }
+    
+    .card-content:hover {
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(109, 50, 50, 0.671), 0 6px 20px 0 rgba(131, 75, 75, 0.644);
+        transform: scale(1.05);
+    }
+    
+    body {
+        scrollbar-width: thin;
+        background-image: url("{% static 'logo.png'%}");
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position-y: 50px;
+    }
+    
+    .row {
+        margin-bottom: 5%;
+    }
+    
+    .btn {
+        width: 120px;
+        height: 35px;
+    }
+    
+    .columns {
+        display: none;
+        width: 100%;
+    }
+    
+    #lefttext {
+        text-align: left;
+        background-color: white;
+        border-radius: 10%;
+        height: 37px;
+        line-height: 37px;
+    }
+    
+    #righttext {
+        text-align: left;
+        background-color: white;
+        border-radius: 10%;
+        height: 37px;
+        line-height: 37px;
+    }
+    
+    .card-content>img {
+        display: block;
+        margin: auto;
+        height: 175px;
+        width: 175px;
+    }
+    
+    .price {
+        text-align: left;
+        margin: 10px
+    }
+    
+    .description {
+        height: 50px;
+        width: 95%;
+        overflow: auto;
+        margin: auto;
+        text-align: left;
+        margin-bottom: 5%;
+    }
+    
+    #top-container {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        margin-top: 1%;
+    }
+    
+    #catogorylist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    #catogorylist>li {
+        border: 2px solid rgb(127, 178, 212);
+        text-align: center;
+        padding: 2%;
+        margin-top: 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        color: black;
+    }
+    
+    #catogorylist>li:hover {
+        background-color: rgb(127, 178, 212) !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
+        transform: scale(1.1);
+        color: white;
+    }
+</style>
+<h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Product List</span></h1>
+<div class="row">
+    <div class="col-sm-2" style=" border-right: 2px solid rgb(127, 178, 212);">
+        <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">CATEGORY</h4>
+        <ul id="catogorylist">
+            <li id='cat1' onclick="catogory(this)" value="All">All</li>
+            <li id='cat2' onclick="catogory(this)" value="Stationary">Stationary</li>
+            <li id='cat3' onclick="catogory(this)" value="Household_supplies">Household</li>
+            <li id='cat4' onclick="catogory(this)" value="Furnitures">Furnitures</li>
+            <li id='cat5' onclick="catogory(this)" value="Sport-item">Sport</li>
+            <li id='cat6' onclick="catogory(this)" value="Electronic-item">Electronic</li>
+            <li id='cat7' onclick="catogory(this)" value="Bags_and_Luggage">Bags</li>
+            <li><a style="text-decoration: none;color:black;" href="{% url 'cart_view' %}">Inventry View</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-10">
+        <div class="container-fluid mb-1" id="top-container">
+            <div class="pagination mb-4" style="color: black; width:150px; margin: auto;text-align: center;background-color: white;">
+                <span class="step-links">                                     
+                    <span class="current btn  btn-outline-dark btn-sm" style="width:150px;height: 30px;">
+                        Page {{ pagenumber.number }} of {{ pagenumber.paginator.num_pages }}.
+                    </span>
+                </span>
+            </div>
+            <div class="container-fluid" style="width: 95%;">
+                {%for one,two in objects %}
+                <div class="row" style="margin-left:5%;">
+                    <div class="col-sm-6 columns">
+                        {% if one.status == "sell" %}
+                        <div class="card-content" ondblclick="detailvalue(this)">
+                            <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
+                            <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
+                            <h2 class="price">Rs.{{one.price }}</h2>
+                            <p class="description">{{one.Description}}</p>
+                            <p class='product_id' style="display:none">{{one.Id}}</p>
+                            <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                            <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                        </div>
+                        {% elif one.status != "sell" %}
+                            {% if user.username|cartexistatnce:one.Id == 'True' %}
+                            <div class="card-content" ondblclick="detailvalue(this)">
+                            {% else %}
+                            <div class="card-content" ondblclick="detailvalue(this)" style="cursor: not-allowed;opacity: .4;">
+                            {% endif%}
+                                <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
+                                <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
+                                <h2 class="price">Rs.{{one.price }}</h2>
+                                <p class="description">{{one.Description}}</p>
+                                <p class='product_id' style="display:none">{{one.Id}}</p>
+                                {% if user.username|cartexistatnce:one.Id == 'True' %}
+                                    <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'View Cart')" onmouseout="removecontent(this,'View Cart')" onclick="viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                    <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                                {% endif%}
+                            </div>
+                        {% endif %}
+
+                        </div>
+                        {% if two %}
+                        <div class="col-sm-6 columns">
+                            {% if two.status == "sell" %}
+                            <div class="card-content" ondblclick="detailvalue(this)">
+                                <h4 id="righttext"><span style="margin-left: 5px;">{{ two.Productname}}</span></h4>
+                                <img class="rounded" src="{{ two.product_mage.url }}" alt="Oh no image!">
+                                <h2 class="price">Rs.{{two.price}}</h2>
+                                <p class="description">{{two.Description}}</p>
+                                <p class='product_id' style="display:none;">{{two.Id}}</p>
+                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button> 
+                            {% elif two.status != "sell" %} 
+                                {% if user.username|cartexistatnce:two.Id == 'True' %}
+                                    <div class="card-content" ondblclick="detailvalue(this)">
+                                {% else %}
+                                    <div class="card-content" ondblclick="detailvalue(this)" style="cursor: not-allowed;opacity: .4;">
+                                {% endif%}
+                                        <h4 id="righttext"><span style="margin-left: 5px;">{{ two.Productname}}</span></h4>
+                                        <img class="rounded" src="{{ two.product_mage.url }}" alt="Oh no image!" style="width: 195px;height: 175px;">
+                                        <h2 class="price">Rs.{{two.price}}</h2>
+                                        <p class="description">{{two.Description}}</p>
+                                        <p class='product_id' style="display:none;">{{two.Id}}</p>
+                                        
+                                        {% if user.username|cartexistatnce:two.Id == 'True' %}
+                                            <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'View Cart')" onmouseout="removecontent(this,'View Cart')" onclick="viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                            <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                                        {% endif%} 
+                            {% endif %}
+                                    </div>
+                                </div>
+                        {% endif %}
+                    </div>
+                            {% empty %}
+                            <div class="conatiner" style="width:70%;margin: auto;">
+                                <img src="{% static 'empty.png'%}" alt="No product match">
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <div class="pagination mt-4" style="color: black; width: 52%; margin: auto;text-align: center;">
+                        <span class="step-links">
+                                            {% if pagenumber.has_previous %}
+                                                <a class="btn btn-primary btn-sm" href="?page=1" role="button" style="width:100px ;height: 30px;">&laquo; first</a>
+                                                <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">previous</a>
+                                            {% endif %}
+                                    
+                                            <span class="current btn btn-warning  btn-sm" style="width:150px;height: 30px;">
+                                                Page {{ pagenumber.number }} of {{ pagenumber.paginator.num_pages }}.
+                                            </span> {% if pagenumber.has_next %}
+                        <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">next</a>
+                        <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">last &raquo;</a> {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <script>
+                $(document).ready(function() {
+                    $(".columns").fadeIn(1000);
+                    if (localStorage.getItem('ptr') != null) {
+                        $("#" + localStorage.getItem('ptr')).css('background-color', 'rgb(127, 178, 212)')
+                    }
+                })
+
+                function detailvalue(ptr) {
+                    var x = $(ptr).find('.product_id').text()
+                    window.location = "{% url 'homepage' %}" + x + "/"
+                }
+
+                function conformation() {
+                    if (confirm("Are you sure you want to logout?")) {
+                        window.location = "{% url 'logout'%}"
+                    }
+                }
+
+                function addcontent(ptr, ch) {
+                    $(ptr).empty()
+                    if (ch == 'Buy') {
+
+                        $(ptr).append("<strong class='ml-2'>Buy!</strong>")
+                    } else {
+                        $(ptr).append("<b>" + ch + "</b>")
+                    }
+                }
+
+                function removecontent(ptr, ch) {
+                    $(ptr).empty()
+                    if (ch == 'Buy') {
+                        $(ptr).append("<i class='fas fa-money-check-alt fa-2x '></i>")
+                    } else {
+                        $(ptr).append("<i class='fas fa-shopping-cart fa-2x '></i>")
+
+                    }
+                }
+
+                function addcartdata(ptr) {
+                    var pid = $(ptr).parent('.card-content').find('.product_id').text()
+                    $.ajax({
+                        url: "{% url 'cartadd' %}",
+                        type: "POST",
+                        headers: {
+                            "X-CSRFToken": '{{ csrf_token }}'
+                        },
+                        data: {
+                            "productid": pid
+                        },
+                        success: function name(params) {
+                            window.location = "{% url 'homepage' %}"
+                        },
+                        error: function name(params) {
+                            alert("System error try after some time");
+                        }
+                    })
+                }
+
+                function viewcart() {
+                    window.location = "{% url 'cart_view'%}"
+                }
+
+                function catogory(ptr) {
+                    $("#catogorylist").find('li').css('background-color', 'white')
+                    $("#catogorylist").find('li').css('color', 'black')
+                    $(ptr).css('background-color', 'rgb(127, 178, 212)')
+                    localStorage.setItem("ptr", $(ptr).attr('id'))
+                    $.ajax({
+                        url: "{% url 'catogories' %}",
+                        type: "POST",
+                        headers: {
+                            "X-CSRFToken": '{{ csrf_token }}'
+                        },
+                        data: {
+                            "catogory": $(ptr).attr('value')
+                        },
+                        success: function name(params) {
+                            window.location = "{% url 'homepage' %}"
+
+                        },
+                        error: function name(params) {
+                            alert("System error try after some time");
+                        }
+                    })
+                }
+            </script>
+            {% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block navlinks%}
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+                                        <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-5">
+                                            {% block register %}
+                                        <a  class="btn btn-outline-dark btn-sm" style="width: 135px;" role="button" href="{% url 'register' %}">Register</a>
+                                            {% endblock %}   
+                                        </ul>
+
+                                </div>   
+{% endblock %} 
+{% block container_block %}          
+    <style>
+                    .asteriskField{
+                        display: none;
+                    }
+                    *{
+                        font-family: 'Lora', serif;
+                    }
+                    body{
+                        background-color: white;
+                    }
+                   
+                    #loginform{
+                        width: 85%;
+                        display: none;
+                        margin: auto;
+                        padding:10%;
+                        border-radius: 3%;
+                        background-color:white ;
+                        color: black;
+                        box-shadow: 0 10px 15px 0 rgba(164, 193, 247, 0.747), 0 6px 20px 0 rgba(164, 193, 247, 0.747);
+                    }
+                  </style>
+
+        <div class="row">
+            <div class="col-sm-6 mt-3" style="height: 573px;text-align: center;">
+                <img src="{%static 'logo.png'%}" alt="" style="width: 100%;height: 80%;">
+                <ul style="width: 80%;margin: auto;text-align: left;padding-top:3%;color: rgb(109, 109, 109);">
+                        <li><p style="font-family: 'Yeon Sung', cursive;font-size: 25px;">An application to help hostel student to sell their belongings after they leave hostel</p></li>
+                 </ul>
+            </div>
+            <div class="col-sm-6 mt-5">
+                <strong>
+                    <form method="post" id="loginform">
+                            <h3 style="text-align: left;padding-bottom: 2%;"><strong>Login Here</strong></h3>
+                                  {% csrf_token %}
+                                  {{ form|crispy }}
+                            <button type="submit" class="btn btn-success">Login</button>
+                            <a  href="{% url 'password_reset' %}"  class="nav-link mt-3" style="padding: 0%;margin: 0%;text-align: left;font-family:  'Merriweather', serif; color: rgb(11, 105, 247)">ForgotPassword</a>
+                    </form>
+              </strong>
+            </div>
+        </div>
+
+
+    <script>
+     $(document).ready(function(){
+        $("#loginform").slideDown("slow");
+        }
+     )
+    </script>
+{% endblock %}
