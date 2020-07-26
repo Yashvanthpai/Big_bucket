@@ -52,3 +52,12 @@ class cart(models.Model):
 
     def __str__(self):
         return str(self.product_id)+","+str(self.cart_id)+","+str(self.request_id)
+
+class order(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    status = models.CharField(max_length=50,default='current')
+    product_id  = models.ForeignKey(Product, blank=True, null=True,on_delete=models.CASCADE)
+    user_id = models.ForeignKey(AuthUser,blank=True,null=True,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.product_id)+","+str(self.order_id)+","+str(self.user_id)

@@ -20,59 +20,50 @@
 {% endif %} {% endblock %} {% block container_block %}
 
 <style>
-    .card-content {
-        width: 95%;
-        margin: 0px;
+    .card-content{
+        width: 350px;
         margin: auto;
-        padding-bottom: 20px;
+        margin-bottom: 2em;
+        padding:20px ;
         text-align: center;
-        background-color: rgba(255, 255, 255, 0.897);
+        background-color: rgba(255, 255, 255, 0.9) ;
         cursor: pointer;
         border: 3px solid white;
         border-radius: 3%;
-        box-shadow: 0 15px 15px 0 rgba(148, 185, 202, 0.747), 0 20px 20px 0 rgba(148, 185, 202, 0.747);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 4px 0 rgba(0, 0, 0, 0.24);
     }
-    
-    .card-content:hover {
-        background-color: white;
-        box-shadow: 0 4px 8px 0 rgba(109, 50, 50, 0.671), 0 6px 20px 0 rgba(131, 75, 75, 0.644);
-        transform: scale(1.05);
+    .card-content:hover{
+            background-color: white;
+            box-shadow: 0 4px 4px 0 rgba(148, 185, 202, 0.747), 0 4px 4px 0 rgba(148, 185, 202, 0.747);
+
     }
     
     body {
-        scrollbar-width: thin;
-        background-image: url("{% static 'logo.png'%}");
-        background-position: center;
-        background-attachment: fixed;
-        background-repeat: no-repeat;
-        background-position-y: 50px;
+            scrollbar-width: thin;
+            background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("{% static 'logo.png'%}");
+            background-position-x: 70%;
+            background-attachment:fixed ;
+            background-repeat:no-repeat ;
+            background-position-y: 100px;
+        
     }
-    
-    .row {
-        margin-bottom: 5%;
-    }
+
     
     .btn {
-        width: 120px;
+        width: 60px;
         height: 35px;
+        margin-right: .5em;
     }
     
-    .columns {
-        display: none;
-        width: 100%;
-    }
     
     #lefttext {
         text-align: left;
-        background-color: white;
-        border-radius: 10%;
-        height: 37px;
+        font-weight: 700;
         line-height: 37px;
     }
     
     #righttext {
         text-align: left;
-        background-color: white;
         border-radius: 10%;
         height: 37px;
         line-height: 37px;
@@ -81,13 +72,19 @@
     .card-content>img {
         display: block;
         margin: auto;
-        height: 175px;
-        width: 175px;
+        height: 150px;
+        width: 150px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+        border-radius: .35em;
+
     }
     
     .price {
         text-align: left;
-        margin: 10px
+        margin: 10px;
+        font-size: 1.5em;
+        font-style: italic;
+        font-weight: 600;
     }
     
     .description {
@@ -97,6 +94,7 @@
         margin: auto;
         text-align: left;
         margin-bottom: 5%;
+        scrollbar-width: thin;
     }
     
     #top-container {
@@ -120,6 +118,7 @@
         border-radius: 15px;
         cursor: pointer;
         color: black;
+        transition: 0.3s;
     }
     
     #catogorylist>li:hover {
@@ -154,101 +153,57 @@
                 </span>
             </div>
             <div class="container-fluid" style="width: 95%;">
-                {%for one,two in objects %}
-                <div class="row" style="margin-left:5%;">
-                    <div class="col-sm-6 columns">
-                        {% if one.status == "sell" %}
-                        <div class="card-content" ondblclick="detailvalue(this)">
-                            <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
-                            <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
-                            <h2 class="price">Rs.{{one.price }}</h2>
-                            <p class="description">{{one.Description}}</p>
-                            <p class='product_id' style="display:none">{{one.Id}}</p>
-                            <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                            <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
-                        </div>
-                        {% elif one.status != "sell" %}
-                            {% if user.username|cartexistatnce:one.Id == 'True' %}
-                            <div class="card-content" ondblclick="detailvalue(this)">
-                            {% else %}
-                            <div class="card-content" ondblclick="detailvalue(this)" style="cursor: not-allowed;opacity: .4;">
-                            {% endif%}
-                                <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
-                                <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
-                                <h2 class="price">Rs.{{one.price }}</h2>
-                                <p class="description">{{one.Description}}</p>
-                                <p class='product_id' style="display:none">{{one.Id}}</p>
-                                {% if user.username|cartexistatnce:one.Id == 'True' %}
-                                    <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'View Cart')" onmouseout="removecontent(this,'View Cart')" onclick="viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                    <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
-                                {% endif%}
-                            </div>
-                        {% endif %}
-
-                        </div>
-                        {% if two %}
-                        <div class="col-sm-6 columns">
-                            {% if two.status == "sell" %}
-                            <div class="card-content" ondblclick="detailvalue(this)">
-                                <h4 id="righttext"><span style="margin-left: 5px;">{{ two.Productname}}</span></h4>
-                                <img class="rounded" src="{{ two.product_mage.url }}" alt="Oh no image!">
-                                <h2 class="price">Rs.{{two.price}}</h2>
-                                <p class="description">{{two.Description}}</p>
-                                <p class='product_id' style="display:none;">{{two.Id}}</p>
-                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button> 
-                            {% elif two.status != "sell" %} 
-                                {% if user.username|cartexistatnce:two.Id == 'True' %}
-                                    <div class="card-content" ondblclick="detailvalue(this)">
-                                {% else %}
-                                    <div class="card-content" ondblclick="detailvalue(this)" style="cursor: not-allowed;opacity: .4;">
-                                {% endif%}
-                                        <h4 id="righttext"><span style="margin-left: 5px;">{{ two.Productname}}</span></h4>
-                                        <img class="rounded" src="{{ two.product_mage.url }}" alt="Oh no image!" style="width: 195px;height: 175px;">
-                                        <h2 class="price">Rs.{{two.price}}</h2>
-                                        <p class="description">{{two.Description}}</p>
-                                        <p class='product_id' style="display:none;">{{two.Id}}</p>
-                                        
-                                        {% if user.username|cartexistatnce:two.Id == 'True' %}
-                                            <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'View Cart')" onmouseout="removecontent(this,'View Cart')" onclick="viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                            <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
-                                        {% endif%} 
-                            {% endif %}
-                                    </div>
+                    <div class="row">
+                    {%for one in objects %}
+                                <div class="col-sm-4">
+                                        <div class="card-content" onclick="detailvalue(this)">
+                                            <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
+                                            <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
+                                            <h2 class="price">Rs.{{one.price }}</h2>
+                                            <p class="description">{{one.Description}}</p>
+                                            <p class='product_id' style="display:none">{{one.Id}}</p>
+                                            {% if user.username|cartexistatnce:one.Id == 'True' %}
+                                                <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'ToCart')" onmouseout="removecontent(this,'View Cart')" onclick="event.stopPropagation();viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                            {% endif%}
+                                        </div>
                                 </div>
-                        {% endif %}
-                    </div>
-                            {% empty %}
-                            <div class="conatiner" style="width:70%;margin: auto;">
-                                <img src="{% static 'empty.png'%}" alt="No product match">
-                            </div>
-                            {% endfor %}
 
-                        </div>
+                    {% empty %}
+                    <div class="conatiner" style="width:70%;margin: auto;">
+                        <img src="{% static 'empty.png'%}" alt="No product match">
                     </div>
-                    <div class="pagination mt-4" style="color: black; width: 52%; margin: auto;text-align: center;">
-                        <span class="step-links">
-                                            {% if pagenumber.has_previous %}
-                                                <a class="btn btn-primary btn-sm" href="?page=1" role="button" style="width:100px ;height: 30px;">&laquo; first</a>
-                                                <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">previous</a>
-                                            {% endif %}
-                                    
-                                            <span class="current btn btn-warning  btn-sm" style="width:150px;height: 30px;">
-                                                Page {{ pagenumber.number }} of {{ pagenumber.paginator.num_pages }}.
-                                            </span> {% if pagenumber.has_next %}
-                        <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">next</a>
-                        <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">last &raquo;</a> {% endif %}
-                        </span>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+        </div>
+        <div class="pagination mt-4 mb-4" style="color: black;display: flex; justify-content: center;align-items:center;">
+            
+                                {% if pagenumber.has_previous %}
+                                    <a class="btn btn-primary btn-sm" href="?page=1" role="button" style="width:100px ;height: 30px;">&laquo; first</a>
+                                    <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">previous</a>
+                                {% endif %}
+                        
+                                <span class="current btn btn-warning  btn-sm" style="width:150px;height: 30px;">
+                                    Page {{ pagenumber.number }} of {{ pagenumber.paginator.num_pages }}.
+                                </span> {% if pagenumber.has_next %}
+            <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">next</a>
+            <a class="btn btn-primary  btn-sm" href="?page={{ pagenumber.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">last &raquo;</a> {% endif %}
+            
+        </div>
+    </div>
+</div>
 
 
             <script>
                 $(document).ready(function() {
                     $(".columns").fadeIn(1000);
+                    
                     if (localStorage.getItem('ptr') != null) {
                         $("#" + localStorage.getItem('ptr')).css('background-color', 'rgb(127, 178, 212)')
+                    }else{
+                        $("#cat1").css('background-color','rgb(127, 178, 212)')
                     }
                 })
 
@@ -266,10 +221,9 @@
                 function addcontent(ptr, ch) {
                     $(ptr).empty()
                     if (ch == 'Buy') {
-
-                        $(ptr).append("<strong class='ml-2'>Buy!</strong>")
+                        $(ptr).append("<i>Buy!</i>")
                     } else {
-                        $(ptr).append("<b>" + ch + "</b>")
+                        $(ptr).append("<i>" + ch + "</i>")
                     }
                 }
 
@@ -330,5 +284,7 @@
                         }
                     })
                 }
+
+                 
             </script>
             {% endblock %}

@@ -1,5 +1,5 @@
 from django import template
-from firstapp.models import Product,AuthUser,cart,User_extends
+from firstapp.models import Product,AuthUser,cart,User_extends,order
 register = template.Library()
 
 @register.filter(name="modulus")
@@ -18,3 +18,19 @@ def cart_data(value,productid):
 def get_address(value):
     instace = User_extends.objects.get(username=value).address
     return str(instace)
+
+
+@register.filter(name="getRequestBadge")
+def badgeCount(value):
+    product_in_cart_instance = 0
+    product_in_cart_instance = cart.objects.filter(product_id__Id=value).count()
+    return product_in_cart_instance
+
+
+@register.filter(name="getOrderStatus")
+def orderStatus(value):
+    status = None
+    status = order.objects.get(order_id=value)
+    if status.status == "current":
+        return 'True'
+    return 'False'

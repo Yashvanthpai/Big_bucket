@@ -1,0 +1,19 @@
+ {% if one.status == "sell" %}
+
+{% elif one.status != "sell" %}
+                                        {% if user.username|cartexistatnce:one.Id == 'True' %}
+                                        <div class="card-content" onclick="detailvalue(this)">
+                                        {% else %}
+                                        <div title="Product already in somebodies cart"  class="card-content" onclick="detailvalue(this)" style="cursor: not-allowed;opacity: .4;">
+                                        {% endif%}
+                                            <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
+                                            <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
+                                            <h2 class="price">Rs.{{one.price }}</h2>
+                                            <p class="description">{{one.Description}}</p>
+                                            <p class='product_id' style="display:none">{{one.Id}}</p>
+                                            {% if user.username|cartexistatnce:one.Id == 'True' %}
+                                                <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'ToCart')" onmouseout="removecontent(this,'View Cart')" onclick="event.stopPropagation();viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                                            {% endif%}
+                                        </div>
+                                    {% endif %}

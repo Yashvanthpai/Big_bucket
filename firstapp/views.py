@@ -4,7 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.urls import reverse
-from firstapp.models import Product,AuthUser,cart,User_extends
+from firstapp.models import Product,AuthUser,cart,order,User_extends
 from django.core.paginator import Paginator
 from django.db.models import Q 
 
@@ -59,7 +59,7 @@ def objectdata_serializer(obj):
 @login_required
 def login_homeview(request):
     global catogory
-    obj = Product.objects.exclude(username__username=request.user.username)
+    obj = Product.objects.all().filter(~Q(username__username=request.user.username) & ~Q(status='sold'))
     if catogory:
         obj = obj.filter(catogory=catogory)
     if request.GET.get('q'):
@@ -72,26 +72,14 @@ def login_homeview(request):
                 Q(status__icontains=querry)|
                 Q(Upload_date__icontains=querry)
             ).distinct()
-    paginator = Paginator(obj, 6) 
+    paginator = Paginator(obj, 15) 
     page = request.GET.get('page')
     obj = paginator.get_page(page)
-    objects = objectdata_serializer(obj)
-    return render(request,'login_home.html',{'objects':objects,'pagenumber':obj})
+    # objects = objectdata_serializer(obj)
+    return render(request,'login_home.html',{'objects':obj,'pagenumber':obj})
 
 
 
-@login_required
-def user_productpage(request):
-    form = Productform()
-    if request.method =="POST":
-        form = Productform(request.POST,request.FILES)
-        if form.is_valid():
-            form.save(userid=request.user.id)
-            form = Productform()
-        else:
-            form = Productform(request.POST,request.FILES)
-
-    return render(request,'user_product.html',{'form':form})
 
 @login_required
 def product_detail_view(request,id=None):
@@ -128,7 +116,7 @@ def cart_view(request):
                 username=AuthUser.objects.get(username=request.user.username),
                 status=str(form.cleaned_data['status']),
                 payment_mode=str(form.cleaned_data['payment_mode']),
-                payment_qr=request.FILES['payment_qr'],
+                payment_qr=request.FILES['payment_qr'] or None,
                 catogory=str(form.cleaned_data['catogory']))
                 form = Productform()
                 cart_option='Product-Post'
@@ -163,27 +151,43 @@ def cart_view(request):
                     Q(status__icontains=querry)|
                     Q(Upload_date__icontains=querry)
                 ).distinct()
+            
+        
+
 
     elif cart_option =="Requested-Product":
-        obj = cart.objects.filter(~Q(product_id__status = 'sell') & ~Q(request_id__id=request.user.id))
+        obj = order.objects.filter(Q(product_id__username__username=request.user.username))
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
-                    Q(request_id__first_name__icontains=querry)|
+                    Q(user_id__first_name__icontains=querry)|
                     Q(product_id__price__icontains=querry)|
                     Q(product_id__Productname__icontains=querry)|
                     Q(product_id__Description__icontains=querry)|
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
+
+    elif cart_option == "My-Orders":
+        obj = order.objects.filter(Q(user_id__username=request.user.username))
+        if request.GET.get('q'):
+            querry = request.GET.get('q')
+            obj = obj.filter(
+                    Q(user_id__first_name__icontains=querry)|
+                    Q(product_id__price__icontains=querry)|
+                    Q(product_id__Productname__icontains=querry)|
+                    Q(product_id__Description__icontains=querry)|
+                    Q(product_id__Upload_date__icontains=querry)
+                ).distinct()
+
     else:
         form = Productform()
 
     if cart_option == "Posted-Product" or cart_option =="Cart" or cart_option =="Requested-Product":
-        paginator = Paginator(obj, 6) 
+        paginator = Paginator(obj, 15) 
         page = request.GET.get('page')
         obj = paginator.get_page(page)
-        objects = objectdata_serializer(obj)
-    return render(request,'cart_view.html',{'objects':objects,'pagenumber':obj,'form':form,'option':cart_option})
+        # objects = objectdata_serializer(obj)
+    return render(request,'cart_view.html',{'objects':obj,'pagenumber':obj,'form':form,'option':cart_option})
 
 def cart_add(request):
     if request.method=="POST" and request.is_ajax():
@@ -203,6 +207,39 @@ def cart_remove(request):
         except Exception as p:
             print(p)
     return HttpResponse(None)
+
+def create_order(request):
+    if request.method=="POST" and request.is_ajax():
+        try:
+            orderinstance = order.objects.create(product_id=Product.objects.get(Id=request.POST.get('product_id')),user_id=AuthUser.objects.get(username=request.user.username))
+            product_instance  = Product.objects.filter(Id=request.POST.get('product_id')).update(status='order')
+            cartinstance = cart.objects.get(cart_id=request.POST.get('cart_id')).delete()
+            # print(orderinstance,product_instance,cartinstance)
+        except Exception as p:
+            print(p)
+
+    return HttpResponse(None)
+
+def cancell_order(request):
+    if request.method=="POST" and request.is_ajax():
+        try:
+            product_instance  = Product.objects.all().filter(Id=request.POST.get('product_id')).update(status='sell')
+            orderinstance = order.objects.get(order_id=request.POST.get('order_id')).delete()
+            cartinstance = cart.objects.create(product_id=Product.objects.get(Id=request.POST.get('product_id')),request_id=AuthUser.objects.get(username=request.user.username))
+        except Exception as p:
+            print(p)
+    return HttpResponse(None)
+
+def sell_product(request):
+    if request.method=="POST" and request.is_ajax():
+        try:
+            product_instance  = Product.objects.all().filter(Id=request.POST.get('product_id')).update(status='sold')
+            orderinstance = order.objects.get(order_id=request.POST.get('order_id')).update(status='sold')
+            cartinstance = cart.objects.filter(product_id__Id=request.POST.get('product_id')).delete()
+        except Exception as p:
+            print(p)
+    return HttpResponse(None)
+
 
 def remove_product(request):
     if request.method=="POST" and request.is_ajax():

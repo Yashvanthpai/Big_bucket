@@ -16,13 +16,13 @@
         <link href="https://fonts.googleapis.com/css?family=Lora&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Yeon+Sung&display=swap" rel="stylesheet">
-               
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">       
     <style>
                     .asteriskField{
                         display: none;
                     }
                     *{
-                        font-family: 'Lora', serif;
+                       font-family: 'Roboto', sans-serif;
                     }
                    
                     .navbarclass2{
@@ -35,17 +35,19 @@
                         font-family: 'Yeon Sung', cursive;
                         font-size: 23px;
                         padding: 5px 15px 5px 15px;
-                        cursor: pointer;
                     }
                     #about>li>p:hover{
-                        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.068),0 6px 20px 0 rgba(0, 0, 0, 0.103);
-                        transform: scale(1.05);
+                        text-shadow: 3px 5px 3px rgba(0, 0, 0, 0.384);
                     }
                     #head{
                         font-family: 'Yeon Sung', cursive;
                         font-size: 45px;
                         text-align: center;
                     }
+                    .fa-2x{
+                        font-size: 1.5em;
+                    }
+                    
 
                   </style>
 </head>
@@ -53,7 +55,7 @@
 <body>
      <strong>
         <nav id="navigationbar" class="navbar navbar-expand-lg   fixed-top navbarclass2" >    
-                            <a  href="/" class="btn btn-outline-dark btn-sm ml-5"  style="width: 135px;height: 30px;" role="button">Big BuckeT</a>
+                            <a  href="/" class="btn btn-outline-warning btn-sm ml-5"  style="width: 135px;height: 30px;color: black;" role="button">Big BuckeT</a>
                             {% block navlinks%}
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
@@ -111,10 +113,12 @@
                             text-align: center;
                             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,.19);
                             cursor: pointer;
+                            transform: scale(1);
+                            transition: transform ease-in 250ms;
                         }
                         #aboutus > .col-sm-4 > .card:hover{
                             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,.19);
-                            transform: scale(1.1);
+                            transform: scale(1.05);
                         }
                         #aboutus> .col-sm-4 > .card >img{
                             text-align: center;
@@ -122,10 +126,14 @@
                             width: 175px;
                             margin: auto;
                         }
+                        .card{
+                            width: 70%;
+                            margin: auto;
+                        }
 
                         </style>
                         <div class="row" id="aboutus" style="margin: auto;margin-bottom: 3%;">
-                            <div class="col-sm-4 ">
+                            <div class="col-sm-4">
                                     <div class="card" >
                                             <img src="{% static 'sameera.jpg' %}" class="rounded-circle mt-3" alt="no image">
                                             <div class="card-body mt-2">

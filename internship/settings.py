@@ -73,6 +73,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'internship.wsgi.application'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Database
@@ -129,6 +130,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     STATIC_DIRS,
 ]
+
 
 MEDIA_URL='/media/'
 MEDIA_ROOT = MEDIA_DIR
