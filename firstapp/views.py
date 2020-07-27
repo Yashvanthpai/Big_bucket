@@ -75,7 +75,6 @@ def login_homeview(request):
     paginator = Paginator(obj, 15) 
     page = request.GET.get('page')
     obj = paginator.get_page(page)
-    # objects = objectdata_serializer(obj)
     return render(request,'login_home.html',{'objects':obj,'pagenumber':obj})
 
 
@@ -182,11 +181,10 @@ def cart_view(request):
     else:
         form = Productform()
 
-    if cart_option == "Posted-Product" or cart_option =="Cart" or cart_option =="Requested-Product":
+    if cart_option == "Posted-Product" or cart_option =="Cart" or cart_option =="Requested-Product" or cart_option == "My-Orders" :
         paginator = Paginator(obj, 15) 
         page = request.GET.get('page')
         obj = paginator.get_page(page)
-        # objects = objectdata_serializer(obj)
     return render(request,'cart_view.html',{'objects':obj,'pagenumber':obj,'form':form,'option':cart_option})
 
 def cart_add(request):

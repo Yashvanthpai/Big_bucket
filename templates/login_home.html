@@ -11,7 +11,6 @@
         <div class="dropdown-menu dropdown-menu-left " aria-labelledby="navbarDropdownMenuLink">
             <strong>
                                             <a class="dropdown-item" href="{% url 'password_change' %}" >Change Password</a> 
-                                            <a class="dropdown-item" href="{% url 'cart_view' %}" >Inventry View</a> 
                                             <a class="dropdown-item" onclick="conformation()" >Logout</a>
                                         </strong>
         </div>
@@ -127,10 +126,35 @@
         transform: scale(1.1);
         color: white;
     }
-</style>
-<h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Product List</span></h1>
-<div class="row">
-    <div class="col-sm-2" style=" border-right: 2px solid rgb(127, 178, 212);">
+    .row{
+        width: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+.alert{
+        position: fixed;
+        left: 50%;
+        top: 0em;       
+        width: 30%;
+        transform: translateX(-30%);
+        z-index: 10;
+        text-align: center;
+        border-radius: 1.5em;
+        line-height: .75em;
+        background-color: #d4edda;
+        color: black;
+        font-size: 1.2em;
+        font-weight: 600;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);
+        transition: top ease-in-out 250ms;
+}
+.alert.activate{
+        top: 3.5em;
+}
+ </style>
+ <p class="alert">Item added to user cart</p>
+<div class="row mt-2">
+    <div class="col-sm-2" style="border-right: 2px solid rgb(127, 178, 212);">
         <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">CATEGORY</h4>
         <ul id="catogorylist">
             <li id='cat1' onclick="catogory(this)" value="All">All</li>
@@ -140,11 +164,17 @@
             <li id='cat5' onclick="catogory(this)" value="Sport-item">Sport</li>
             <li id='cat6' onclick="catogory(this)" value="Electronic-item">Electronic</li>
             <li id='cat7' onclick="catogory(this)" value="Bags_and_Luggage">Bags</li>
+        </ul>
+        <hr>
+        <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">Navigation</h4>
+        <ul id="catogorylist">
             <li><a style="text-decoration: none;color:black;" href="{% url 'cart_view' %}">Inventry View</a></li>
         </ul>
     </div>
     <div class="col-sm-10">
         <div class="container-fluid mb-1" id="top-container">
+            <h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Product List</span></h1>
+
             <div class="pagination mb-4" style="color: black; width:150px; margin: auto;text-align: center;background-color: white;">
                 <span class="step-links">                                     
                     <span class="current btn  btn-outline-dark btn-sm" style="width:150px;height: 30px;">
@@ -205,6 +235,17 @@
                     }else{
                         $("#cat1").css('background-color','rgb(127, 178, 212)')
                     }
+
+                    if (localStorage.getItem('previousOperation')!=null){
+                        var previousOperation = localStorage.getItem('previousOperation');
+                        var message = null;
+                        if(previousOperation === "addCart"){
+                                message="Item successfully added to cart";
+                                getMessage(message);
+                        }
+                        localStorage.setItem('previousOperation',null)
+                        
+                    }
                 })
 
                 function detailvalue(ptr) {
@@ -249,6 +290,7 @@
                             "productid": pid
                         },
                         success: function name(params) {
+                            localStorage.setItem("previousOperation","addCart");
                             window.location = "{% url 'homepage' %}"
                         },
                         error: function name(params) {
@@ -258,6 +300,7 @@
                 }
 
                 function viewcart() {
+                    localStorage.setItem("previousOperation",null);
                     window.location = "{% url 'cart_view'%}"
                 }
 
@@ -284,6 +327,14 @@
                         }
                     })
                 }
+
+                function getMessage(message){
+                $('.alert').text(message)
+                $('.alert').toggleClass('activate')
+                setTimeout(()=>{
+                        $('.alert').toggleClass('activate')
+                }, 2000)
+        }
 
                  
             </script>
