@@ -30,22 +30,14 @@
         border: 3px solid white;
         border-radius: 3%;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 4px 0 rgba(0, 0, 0, 0.24);
+        border: 2px solid transparent;
+
     }
     .card-content:hover{
             background-color: white;
-            box-shadow: 0 4px 4px 0 rgba(148, 185, 202, 0.747), 0 4px 4px 0 rgba(148, 185, 202, 0.747);
+            border: 2px solid #f2cf43;
+    }
 
-    }
-    
-    body {
-            scrollbar-width: thin;
-            background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("{% static 'logo.png'%}");
-            background-position-x: 70%;
-            background-attachment:fixed ;
-            background-repeat:no-repeat ;
-            background-position-y: 100px;
-        
-    }
 
     
     .btn {
@@ -75,7 +67,6 @@
         width: 150px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
         border-radius: .35em;
-
     }
     
     .price {
@@ -110,9 +101,14 @@
     }
     
     #catogorylist>li {
-        border: 2px solid rgb(127, 178, 212);
+        border-width: 2px;
+        border-style: solid;
+        border-color: #f2cf43 ;
+        /* border-image-source: linear-gradient(315deg, #f2cf43 0%, #19a186 74%); */
         text-align: center;
-        padding: 2%;
+        padding: .25em 1em;
+        width: 175px;
+        margin: auto;
         margin-top: 10px;
         border-radius: 15px;
         cursor: pointer;
@@ -121,10 +117,11 @@
     }
     
     #catogorylist>li:hover {
-        background-color: rgb(127, 178, 212) !important;
+        background-color: #fbb034;
+        background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
         transform: scale(1.1);
-        color: white;
+        color: black;
     }
     .row{
         width: 100%;
@@ -141,7 +138,8 @@
         text-align: center;
         border-radius: 1.5em;
         line-height: .75em;
-        background-color: #d4edda;
+        background-color: #f5f186;
+        background-image: linear-gradient(315deg, #f5f186 0%, #9dfbc8 74%);
         color: black;
         font-size: 1.2em;
         font-weight: 600;
@@ -151,10 +149,13 @@
 .alert.activate{
         top: 3.5em;
 }
+    .main-container{  
+        background-image:  linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)),url("{% static 'logo.png'%}");  
+    }
  </style>
  <p class="alert">Item added to user cart</p>
-<div class="row mt-2">
-    <div class="col-sm-2" style="border-right: 2px solid rgb(127, 178, 212);">
+ <div class="row mt-2" style="position: relative;z-index: 5;">
+    <div class="col-sm-2" style="border-right: 2px solid #fbb034;">
         <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">CATEGORY</h4>
         <ul id="catogorylist">
             <li id='cat1' onclick="catogory(this)" value="All">All</li>
@@ -231,10 +232,17 @@
                     $(".columns").fadeIn(1000);
                     
                     if (localStorage.getItem('ptr') != null) {
-                        $("#" + localStorage.getItem('ptr')).css('background-color', 'rgb(127, 178, 212)')
+                        $("#" + localStorage.getItem('ptr')).css({
+                           'background-color':'#fbb034',
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                        })
                     }else{
-                        $("#cat1").css('background-color','rgb(127, 178, 212)')
+                        $("#cat1").css({
+                            'background-color':'#fbb034',
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                            })
                     }
+                   
 
                     if (localStorage.getItem('previousOperation')!=null){
                         var previousOperation = localStorage.getItem('previousOperation');

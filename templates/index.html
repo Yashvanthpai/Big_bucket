@@ -25,18 +25,6 @@
                        font-family: 'Roboto', sans-serif;
                     }
                    
-                    .navbarclass2{
-                        background-color:whitesmoke;
-                        box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
-                        position: sticky;
-                        top: 0;
-                        height: 7vh;
-                    }
-                    .main-container{
-                        width: 100%;
-                        min-height: calc( 100vh - 7vh);
-                        
-                    }
                     #about>li{
                         list-style: none;
                     }
@@ -47,10 +35,9 @@
                         padding: 5px 15px 5px 15px;
                         color: black;
                         text-align: center;
-                    }
-                    #about>li>p:hover{
                         text-shadow: 3px 5px 3px rgba(0, 0, 0, 0.384);
                     }
+                   
                     #head{
                         font-family: 'Yeon Sung', cursive;
                         font-size: 45px;
@@ -59,22 +46,14 @@
                     .fa-2x{
                         font-size: 1.5em;
                     }
-                    
-                    body {
-                        scrollbar-width: thin;
-                        background-image: linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)), url("{% static 'logo.png'%}");
-                        background-position-x: 50%;
-                        background-attachment:fixed ;
-                        background-repeat:no-repeat ;
-                        background-position-y: 100px;
-        
-                    }
                         #aboutus > .col-sm-4 > .card{
                             text-align: center;
                             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,.19);
                             cursor: pointer;
                             transform: scale(1);
                             transition: transform ease-in 250ms;
+                            background-color: rgba(255, 255, 255, 0.534);
+
                         }
                         #aboutus > .col-sm-4 > .card:hover{
                             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,.19);
@@ -94,7 +73,7 @@
                         .chartbody{
                             display: flex;
                             justify-content: center;
-                            align-items: center;
+                            align-items: flex-end;
                         }
 
                         .chart{
@@ -110,16 +89,57 @@
                         .chartheadding{
                             text-align: center;
                             padding: 1em;
+                            color: black;
+                            font-weight: 650;
                         }
 
                         i{
                             pointer-events: none;
                         }
+                        .toplevel-container{
+                          width: 100%;
+                          height: 100vh;
+                          overflow: hidden;
+                        }
+                         .navbarclass2{
+                            background-color:whitesmoke;
+                            box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+                            position: sticky;
+                            top: 0;
+                            height: 7vh;
+                        }
+                        .main-container{
+                            width: 100%;
+                            height: calc( 100vh - 7vh);
+                            overflow: auto;
+                            background-image:  url("{% static 'logo.png'%}");
+                            background-position-x: -10%;
+                            background-attachment:fixed ;
+                            background-repeat:no-repeat ;
+                            background-position-y: 100px;
+                            position:relative;
+                        }
+                        .main-container::after{
+                          content: " ";
+                          clip-path:  circle(45.2% at 87% 28%);
+                          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25), 0 6px 20px 0 rgba(0, 0, 0, 0.25);
+                          background-color: #f9484a;
+                          background-image: linear-gradient(315deg, #f9484a 0%, #fbd72b 74%);
+                          position: absolute;
+                          right: 0;
+                          top: 0;
+                          z-index: 2;
+                          width: 100%;
+                          height: 100%;
+                        }
+
+
                        
                   </style>
 </head>
 
 <body>
+    <div class="toplevel-container">
         <nav id="navigationbar" class="navbar navbar-expand-lg   fixed-top navbarclass2" >    
                             <a  href="/" class="btn btn-outline-warning btn-sm ml-5"  style="width: 135px;height: 30px;color: black;" role="button">Big BuckeT</a>
                             {% block navlinks%}
@@ -131,7 +151,7 @@
                                         <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-5">
                                             {% block register %}
                                         <a  class="btn btn-outline-dark btn-sm" style="width: 90px;" role="button" href="{% url 'register' %}">Register</a>
-                                        <a  class="btn btn-outline-dark ml-2 btn-sm" style="width: 90px;" role="button" href="{% url 'login' %}">Login</a>
+                                        <a  class="btn btn-outline-warning ml-2 btn-sm" style="width: 90px;" role="button" href="{% url 'login' %}">Login</a>
                                         <a  class="btn btn-outline-dark ml-2 btn-sm" style="width: 90px;" role="button" href="/admin/">Admin</a>
 
                                             {% endblock %}                                        
@@ -142,22 +162,11 @@
                
         </nav>
         
-    <div class="container-fluid main-container">
+        <div class="container-fluid main-container">
         {% block container_block %}
-        <strong >
-                 <p id="head" style="padding-top:.5em;">About Application</p>
-        </strong>
-        <div class="row " >
-             <div class="col-sm-6">
-                  <strong>
-                    <ul id="about" style="width: 80%;margin: auto;text-align: left;padding-top:3%;color: rgb(109, 109, 109);">
-                        <li><p>An application to help hostel student to sell their belongings after they leave hostel.</p></li>
-                        <li><p>Big Bucket is e-marketplace that is extremely efficient for the students who stay away from home and need any sort of product for a short time.</p></li>
-                        <li><p>Big Bucket makes their users their top priority and successfully appeals to their values,knowledge and interests.</p></li>
-                 </ul>
-              </strong>
-             </div>
-             <div class="col-sm-6 chartbody">
+        
+        <div class="row" >
+            <div class="col-sm-6 chartbody">
 
                             <div class="chart">
                                             <h5 class="chartheadding">Total users on website    </h5>
@@ -165,9 +174,20 @@
                             </div>
 
              </div>
+             <div class="col-sm-6" style="z-index: 5;">
+                  <strong>
+                    <p id="head" style="padding-top:.75em;">About Application</p>
+                    <ul id="about" style="width: 80%;margin: auto;text-align: left;padding-top:3%;color: rgb(109, 109, 109);">
+                        <li><p>An application to help hostel student to sell their belongings after they leave hostel.</p></li>
+                        <li><p>Big Bucket is e-marketplace that is extremely efficient for the students who stay away from home and need any sort of product for a short time.</p></li>
+                        <li><p>Big Bucket makes their users their top priority and successfully appeals to their values,knowledge and interests.</p></li>
+                 </ul>
+              </strong>
+             </div>
+            
                
         </div>
-        <div class="container-fluid mb-3" style="padding: 0;padding-bottom: 3%;margin-top: 5%;">
+        <div class="container-fluid mb-3" style="padding: 0;padding-bottom: 3%;margin-top: 10em;">
                         <p id="head">About Us</p>
                         <div class="row" id="aboutus" style="margin: auto;margin-bottom: 3%;">
                             <div class="col-sm-4">
@@ -206,13 +226,14 @@
                 
                 
         </div>
+    </div>
 
      <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
      <script>
       
 
          var options = {
-          series: [10],
+          series: ['{{ userCount }}'],
           chart: {
            width: 375,
            height: 225,

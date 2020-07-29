@@ -3,9 +3,9 @@
 {% load custemtemplates %}
 {% load crispy_forms_tags %}
 
-        {% block navlinks %}
+        {% block register %}
                 {% if user.is_authenticated %}
-                <ul class="navbar-nav ml-auto mr-5">
+                <ul class="navbar-nav ml-auto mr-5 " >
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" style="width: 80px;color: black;" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-users-cog fa-lg" style="margin-right: 10px;"></i><strong >{{user.first_name }}</strong>
@@ -17,32 +17,34 @@
                         </div>
                     </li>
                 </ul>
+
+               
                 {% endif %}
         {% endblock %}
 
 {% block container_block %}
 <style>
-body{
-    background-image: url("{% static 'logoforms.png' %}");
-    background-repeat: no-repeat;
-    background-position: left;
-    background-attachment: fixed;
-    background-position-y: 70px;
-    background-position-x: -85px;
-    
-}
+
 
 label{
         float: left;
 }
-
+.main-container{  
+        background-image:  linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)),url("{% static 'logo.png'%}");  
+    }
 
 
 </style>
 
 
- <div class="container mb-5" style="width: 65%; margin: auto;border: 3px solid rgba(241, 180, 100, 0.76);padding: 0;">
-                    <h5 style="background-color: rgba(65, 48, 25, 0.76);color: white;;height: 35px;line-height: 35px;"><span class="ml-3">Detailed list</span></h5>
+ <div class="container mb-5 mt-5" style="
+        position: relative;
+        z-index: 5;
+        width: 55%;
+        margin: auto;
+        border: 3px solid rgba(241, 180, 100, 0.76);
+        padding: 0;">
+                    <h5 style="background-color: rgba(65, 48, 25, 0.76);color: white;;height: 35px;line-height: 35px;"><span class="ml-3">User Info</span></h5>
                     <div class="div" style="padding: 3%;background-color: rgba(250, 250, 250, 0.925);">
                                 {{form|crispy}}
                                 {{form1|crispy}}

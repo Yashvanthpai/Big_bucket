@@ -39,22 +39,15 @@
         border: 3px solid white;
         border-radius: 3%;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 4px 0 rgba(0, 0, 0, 0.24);
+        border: 2px solid transparent;
+
     }
     .card-content:hover{
             background-color: white;
-            box-shadow: 0 4px 4px 0 rgba(148, 185, 202, 0.747), 0 4px 4px 0 rgba(148, 185, 202, 0.747);
+            border: 2px solid #f2cf43;
+    }
 
-    }
-    
-    body {
-            scrollbar-width: thin;
-            background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url("{% static 'logo.png'%}");
-            background-position-x: 70%;
-            background-attachment:fixed ;
-            background-repeat:no-repeat ;
-            background-position-y: 100px;
-        
-    }
+
 
     
     .btn {
@@ -116,26 +109,32 @@
         margin: 0;
        
 }
-#catogorylist > li{
-        border: 2px solid rgb(127, 178, 212);
+ #catogorylist>li {
+        border-width: 2px;
+        border-style: solid;
+        border-color: #f2cf43 ;
         text-align: center;
-        padding: 2%;
+        padding: .25em 1em;
+        width: 175px;
+        margin: auto;
         margin-top: 10px;
         border-radius: 15px;
         cursor: pointer;
         color: black;
         transition: 0.3s;
-}
-#catogorylist > li:hover{
-        background-color: rgb(127, 178, 212) !important;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);
+    }
+    
+    #catogorylist>li:hover {
+        background-color: #fbb034;
+        background-image: linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19);
         transform: scale(1.1);
-        color: white;
-}
+        color: black;
+    }
 #postform{
     width: 70%;
-    box-shadow: 0 4px 8px 0 rgb(127, 178, 212),0 6px 20px 0 rgb(127, 178, 212);
-    background-color: rgba(245, 245, 245, 0.795);
+    box-shadow: 0 4px 8px 0 #fbaf3493,0 6px 20px 0 #fbb03493;
+    background-color: rgba(245, 245, 245, 0.9);
     padding: 3%;
     margin: auto;
     margin-bottom: 3%;
@@ -147,7 +146,8 @@
         padding: .75em;
         text-align: center;
         border-radius: 1em;
-        background-color: red;
+        background-color: #f5d020;
+        background-image: linear-gradient(315deg, #f5d020 0%, #f53803 74%);
         box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);
         font-weight: 600;
         color: white;
@@ -162,7 +162,8 @@
         text-align: center;
         border-radius: 1.5em;
         line-height: .75em;
-        background-color: #d4edda;
+        background-color: #f5f186;
+        background-image: linear-gradient(315deg, #f5f186 0%, #9dfbc8 74%);
         color: black;
         font-size: 1.2em;
         font-weight: 600;
@@ -172,10 +173,13 @@
 .alert.activate{
         top: 3.5em;
 }
+.main-container{  
+        background-image:  linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)),url("{% static 'logo.png'%}");  
+    }
  </style>
  <p class="alert">Item added to user cart</p>
-  <div class="row mt-2">
-            <div class="col-sm-2" style="border-right: 2px solid rgb(127, 178, 212);">
+  <div class="row mt-2" style="position: relative;z-index: 5;">
+            <div class="col-sm-2" style="border-right: 2px solid #f2cf43;">
                     <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">Dashboard</h4>
                     <ul id="catogorylist">
                             <li id='opt1' data-option="Cart" onclick="options(this)">Cart</li>
@@ -263,7 +267,9 @@
                                                                         <h2 class="price" >Rs.{{one.price }}</h2>
                                                                         <p class="description">{{one.Description}}</p>
                                                                         <p class='product_id'style="display:none">{{one.Id}}</p>
-                                                                        <p class="badge">{{one.Id|getRequestBadge}}</p>
+                                                                        {% if one.Id|getRequestBadge != 0 %}
+                                                                                <p class="badge">{{one.Id|getRequestBadge}}</p>
+                                                                        {% endif %}
                                                                         <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Product')" onclick="event.stopPropagation();Removeproduct(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
                                                                 </div>
                                                         </div>
@@ -344,9 +350,15 @@
         $(document).ready(function(){
                 $(".columns").fadeIn(1000);
                 if (localStorage.getItem('cart_page')!=null){
-                        $("#"+localStorage.getItem('cart_page')).css('background-color','rgb(127, 178, 212)') 
+                        $("#"+localStorage.getItem('cart_page')).css({
+                           'background-color':'#fbb034',
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                        })
                 }else{
-                    $("#opt1").css('background-color','rgb(127, 178, 212)')
+                    $("#opt1").css({
+                           'background-color':'#fbb034',
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                        })
                 }
 
                 if (localStorage.getItem('previousOperation')!=null){
@@ -362,7 +374,7 @@
                                 message="new order has been created successfully";
                         }
                         else if(previousOperation === "cancelOrder"){
-                                message="order has been cancelled successfully and added to cart";
+                                message="order has been cancelled and added to cart";
                         }else{
                                 sellProduct
                                 message="Item sold to perticular user successfully";

@@ -14,7 +14,8 @@ catogory=None
 cart_option='Cart'
 
 def indexview(request):
-    return render(request,'index.html',{})
+    user_count = User_extends.objects.all().count()
+    return render(request,'index.html',{"userCount":user_count})
 
 def registerview(request):
     form1 = Userregistrtion()
@@ -41,20 +42,6 @@ def registerview(request):
     
     return render(request,'register.html',{'form1':form1,'form2':form2})
 
-def objectdata_serializer(obj):
-    i=0
-    res=[]
-    while i < len(obj):
-        li=[]
-        li.append(obj[i])
-        i+=1
-        if i < len(obj):
-            li.append(obj[i])  
-        else:
-            li.append(None)
-        i+=1  
-        res.append(li)
-    return res
 
 @login_required
 def login_homeview(request):
@@ -72,7 +59,7 @@ def login_homeview(request):
                 Q(status__icontains=querry)|
                 Q(Upload_date__icontains=querry)
             ).distinct()
-    paginator = Paginator(obj, 15) 
+    paginator = Paginator(obj, 12) 
     page = request.GET.get('page')
     obj = paginator.get_page(page)
     return render(request,'login_home.html',{'objects':obj,'pagenumber':obj})
@@ -182,7 +169,7 @@ def cart_view(request):
         form = Productform()
 
     if cart_option == "Posted-Product" or cart_option =="Cart" or cart_option =="Requested-Product" or cart_option == "My-Orders" :
-        paginator = Paginator(obj, 15) 
+        paginator = Paginator(obj, 12) 
         page = request.GET.get('page')
         obj = paginator.get_page(page)
     return render(request,'cart_view.html',{'objects':obj,'pagenumber':obj,'form':form,'option':cart_option})

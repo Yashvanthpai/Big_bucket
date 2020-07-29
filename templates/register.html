@@ -9,7 +9,7 @@
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                         <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mr-5">
                         {% block register %}
-                        <a   class="btn btn-outline-dark btn-sm" style="width: 135px;" role="button" href="{% url 'login' %}">Login</a>
+                        <a   class="btn btn-outline-warning btn-sm" style="width: 90px;" role="button" href="{% url 'login' %}">Login</a>
                         {% endblock %}
                         </ul>
 
@@ -17,23 +17,18 @@
         {% endblock %}
 
 {% block container_block %}
-<style>
-body{
-    background-image: url("{% static 'logo.png' %}");
-    background-position:center ;
-    background-attachment: fixed;
-    background-position-y: 70px;
-    background-repeat: no-repeat;
-    
-}
-</style>
- <div class="container-fluid mb-3" style="margin-top: 3%;">
+
+ <div class="container-fluid" style="margin-top: 3%;position: relative;z-index: 5;">
    <strong >
-        <form id='registerform' method="post" enctype="multipart/form-data" style="display: none;
-          width: 60%;padding:5%;
+        <form id='registerform' method="post" enctype="multipart/form-data" style="
+          display: none;
+          
+          width: 60%;
+          padding:5em;
           margin: auto; 
-          background-color: rgba(245, 245, 245, 0.603);
-          box-shadow: 0 10px 15px 0 rgba(164, 187, 252, 0.747), 0 6px 20px 0 rgba(164, 187, 252, 0.747);">
+          color: black;
+          background-color: rgba(245, 245, 245, 0.9);
+          box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.17), 0 6px 20px 0 rgba(0, 0, 0, 0.2);">
                 <h3 style="text-align: left;"><strong>Register Here</strong></h3>
                       {% csrf_token %}
                       {{ form1|crispy }}
