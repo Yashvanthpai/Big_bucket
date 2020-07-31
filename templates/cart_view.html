@@ -176,6 +176,15 @@
 .main-container{  
         background-image:  linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)),url("{% static 'logo.png'%}");  
     }
+    tr{
+            border-bottom: 1px solid orange;
+            
+    }
+    th{
+            padding: 1em;
+            font-size: 1.2em;
+            text-align: center;
+    }
  </style>
  <p class="alert">Item added to user cart</p>
   <div class="row mt-2" style="position: relative;z-index: 5;">
@@ -195,7 +204,7 @@
                     </ul>
             </div>
            <div class="col-sm-10">
-                    <div class="container-fluid mb-5" id="top-container" >
+                    <div class="container-fluid" id="top-container" >
                         <h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Inventory</span></h1>
                         <div class="pagination mb-4" style="color: black; width:150px; margin: auto;text-align: center;background-color: white;">
                                         <span class="step-links">                                     
@@ -328,7 +337,7 @@
                             {% endif %}
                         </div>
                     </div>
-                <div class="pagination mt-4 mb-4" style="color: black;display: flex; justify-content: center;align-items:center;">
+                    <div class="pagination mt-4 mb-5" style="color: black;display: flex; justify-content: center;align-items:center;">
                             {% if pagenumber.has_previous %}
                                 <a class="btn btn-primary btn-sm" href="?page=1" role="button" style="width:100px ;height: 30px;">&laquo; first</a>
                                 <a class="btn btn-primary btn-sm" href="?page={{ pagenumber.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">previous</a>
@@ -343,6 +352,20 @@
                                 <a class="btn btn-primary btn-sm" href="?page={{ pagenumber.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q}}{% endif %}" role="button" style="width:100px ;height: 30px;">last &raquo;</a>
                             {% endif %}
                     </div>
+                     {%if option != 'Post-Product' %}
+                        <div class="container mb-5">
+                                <table style="width: 50%; margin: auto;text-shadow: 3px 5px 3px rgba(0, 0, 0, 0.384);">
+                                        <tr>
+                                                <th>Total Item</th>
+                                                <th>{{bill.total_item}}</th>
+                                        </tr>
+                                        <tr>
+                                                <th>Total Amount</th>
+                                                <th><span class="mr-2" style="text-shadow:none;color: orange;" >Rs.</span>{{ bill.total_amount }}</th>
+                                        </tr>
+                                </table>
+                        </div>
+                    {% endif %}
             </div>
         </div>
 

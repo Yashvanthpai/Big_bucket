@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from firstapp.models import Product,AuthUser,cart,order,User_extends
 from django.core.paginator import Paginator
-from django.db.models import Q 
+from django.db.models import Q,Sum
 
 # Create your views here.
 
@@ -89,6 +89,8 @@ def user_detail_view(request,id=None):
 @login_required
 def cart_view(request):
     global cart_option
+    total_item = 0
+    total_amount= 0
     form,objects,obj = None,None,None
     if request.method =="POST":
         form = Productform(request.POST,request.FILES)
@@ -115,6 +117,8 @@ def cart_view(request):
 
     if cart_option == "Cart":
         obj = cart.objects.filter(request_id__username=request.user.username)
+        total_item = len(obj)
+        total_amount = float((cart.objects.filter(Q(request_id__username=request.user.username)).aggregate(Sum('product_id__price')))['product_id__price__sum'])
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -124,9 +128,13 @@ def cart_view(request):
                     Q(product_id__Description__icontains=querry)|
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
+            total_item = len(obj)
+            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum']
 
     elif cart_option =="Posted-Product":
         obj = Product.objects.filter(username__username=request.user.username)
+        total_item = len(obj)
+        total_amount = float(Product.objects.filter(Q(username__username=request.user.username)).aggregate(Sum('price'))['price__sum'])
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -137,12 +145,14 @@ def cart_view(request):
                     Q(status__icontains=querry)|
                     Q(Upload_date__icontains=querry)
                 ).distinct()
+            total_item = len(obj)
+            total_amount = (obj.aggregate(Sum("price")))['price__sum']
             
         
-
-
     elif cart_option =="Requested-Product":
         obj = order.objects.filter(Q(product_id__username__username=request.user.username))
+        total_item = order.objects.filter(Q(product_id__username__username=request.user.username)).count()
+        total_amount = float(order.objects.filter(Q(product_id__username__username=request.user.username)).aggregate(Sum('product_id__price'))['product_id__price__sum'])
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -152,9 +162,14 @@ def cart_view(request):
                     Q(product_id__Description__icontains=querry)|
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
+            total_item = len(obj)
+            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum']
 
     elif cart_option == "My-Orders":
         obj = order.objects.filter(Q(user_id__username=request.user.username))
+        total_item = len(obj)
+        total_amount = float(order.objects.filter(Q(user_id__username=request.user.username)).aggregate(Sum('product_id__price'))['product_id__price__sum'])
+       
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -164,6 +179,8 @@ def cart_view(request):
                     Q(product_id__Description__icontains=querry)|
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
+            total_item = len(obj)
+            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum']
 
     else:
         form = Productform()
@@ -172,7 +189,8 @@ def cart_view(request):
         paginator = Paginator(obj, 12) 
         page = request.GET.get('page')
         obj = paginator.get_page(page)
-    return render(request,'cart_view.html',{'objects':obj,'pagenumber':obj,'form':form,'option':cart_option})
+        bill_context = {'total_amount':total_amount,'total_item':total_item}
+    return render(request,'cart_view.html',{'objects':obj,'pagenumber':obj,'form':form,'option':cart_option,'bill':bill_context})
 
 def cart_add(request):
     if request.method=="POST" and request.is_ajax():
