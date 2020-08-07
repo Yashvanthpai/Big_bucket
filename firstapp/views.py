@@ -91,7 +91,7 @@ def cart_view(request):
     global cart_option
     total_item = 0
     total_amount= 0
-    form,objects,obj = None,None,None
+    form,objects,obj,bill_context = None,None,None,None
     if request.method =="POST":
         form = Productform(request.POST,request.FILES)
         try:
