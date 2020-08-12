@@ -25,17 +25,11 @@
         margin-bottom: 2em;
         padding:20px ;
         text-align: center;
-        background-color: rgba(255, 255, 255, 0.9) ;
+        background-color: white ;
         cursor: pointer;
-        border: 3px solid white;
-        border-radius: 3%;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 4px 0 rgba(0, 0, 0, 0.24);
-        border: 2px solid transparent;
-
-    }
-    .card-content:hover{
-            background-color: white;
-            border: 2px solid #f2cf43;
+        border-radius: .4em;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.055), 0 6px 20px 0 rgba(0, 0, 0, 0.055);
+        border: 1px solid #dadce0;
     }
 
 
@@ -59,13 +53,16 @@
         height: 37px;
         line-height: 37px;
     }
-    
-    .card-content>img {
+    .cardcolumn{
+        min-height: 160px !important;
+    }
+    .buttoncolumn{
+        align-self: center;
+    }
+    .rounded {
         display: block;
-        margin: auto;
         height: 150px;
         width: 150px;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
         border-radius: .35em;
     }
     
@@ -101,9 +98,9 @@
     }
     
     #catogorylist>li {
-        border-width: 2px;
+        border-width: 1px;
         border-style: solid;
-        border-color: #f2cf43 ;
+        border-color: rgb(218, 218, 218) ;
         /* border-image-source: linear-gradient(315deg, #f2cf43 0%, #19a186 74%); */
         text-align: center;
         padding: .25em 1em;
@@ -177,7 +174,7 @@
             <li><a style="text-decoration: none;color:black;" href="{% url 'cart_view' %}">Inventry View</a></li>
         </ul>
     </div>
-    <div class="col-sm-10">
+    <div class="col-sm-10 mt-3">
         <div class="container-fluid mb-1" id="top-container">
             <h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Product List</span></h1>
 
@@ -194,15 +191,23 @@
                                 <div class="col-sm-4">
                                         <div class="card-content" onclick="detailvalue(this)">
                                             <h4 id="lefttext"><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
-                                            <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
+                                            <div class="row cardcolumn">
+                                                <div class="col-sm-8">
+                                                    <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!">
+                                                </div>
+                                                <div class="col-sm-4 buttoncolumn">
+                                                    {% if user.username|cartexistatnce:one.Id == 'True' %}
+                                                        <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'ToCart')" onmouseout="removecontent(this,'View Cart')" onclick="event.stopPropagation();viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                    {% endif%}
+                                                </div>
+                                            </div>
+                                            
                                             <h2 class="price">Rs.{{one.price }}</h2>
                                             <p class="description">{{one.Description}}</p>
                                             <p class='product_id' style="display:none">{{one.Id}}</p>
-                                            {% if user.username|cartexistatnce:one.Id == 'True' %}
-                                                <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'ToCart')" onmouseout="removecontent(this,'View Cart')" onclick="event.stopPropagation();viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                            {% else %}
-                                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                            {% endif%}
+                                            
                                         </div>
                                 </div>
 
@@ -239,12 +244,16 @@
                     if (localStorage.getItem('ptr') != null) {
                         $("#" + localStorage.getItem('ptr')).css({
                            'background-color':'#fbb034',
-                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)',
+                            'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
+                            'border-color': 'white'
                         })
                     }else{
                         $("#cat1").css({
                             'background-color':'#fbb034',
-                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)',
+                            'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
+                            'border-color': 'white'
                             })
                     }
                    
@@ -292,7 +301,8 @@
                 }
 
                 function addcartdata(ptr) {
-                    var pid = $(ptr).parent('.card-content').find('.product_id').text()
+                    var pid = $(ptr).parents('.card-content').find('.product_id').text()
+                    alert(pid)
                     $.ajax({
                         url: "{% url 'cartadd' %}",
                         type: "POST",

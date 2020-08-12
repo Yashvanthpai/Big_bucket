@@ -34,24 +34,29 @@
         margin-bottom: 2em;
         padding:20px ;
         text-align: center;
-        background-color: rgba(255, 255, 255, 0.9) ;
+        background-color: white ;
         cursor: pointer;
-        border: 3px solid white;
-        border-radius: 3%;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.19), 0 4px 4px 0 rgba(0, 0, 0, 0.24);
-        border: 2px solid transparent;
-
-    }
-    .card-content:hover{
-            background-color: white;
-            border: 2px solid #f2cf43;
+        border-radius: .4em;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.055), 0 6px 20px 0 rgba(0, 0, 0, 0.055);
+        border: 1px solid #dadce0;
     }
 
-
+   .cardcolumn{
+        min-height: 160px !important;
+    }
+    .buttoncolumn{
+        align-self: center;
+    }
 
     
-    .btn {
+    .card-content .btn {
        
+        width: 70px;
+        height: 35px;
+        margin-top: .5em;
+    }
+
+    .btn {
         width: 70px;
         height: 35px;
         margin-right: .5em;
@@ -71,12 +76,10 @@
         line-height: 37px;
     }
     
-    .card-content>img {
+    .rounded {
         display: block;
-        margin: auto;
         height: 150px;
         width: 150px;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
         border-radius: .35em;
 
     }
@@ -110,9 +113,9 @@
        
 }
  #catogorylist>li {
-        border-width: 2px;
+        border-width: 1px;
         border-style: solid;
-        border-color: #f2cf43 ;
+        border-color: rgb(218, 218, 218) ;
         text-align: center;
         padding: .25em 1em;
         width: 175px;
@@ -145,9 +148,8 @@
         top: -1em;
         padding: .75em;
         text-align: center;
-        border-radius: 1em;
-        background-color: #f5d020;
-        background-image: linear-gradient(315deg, #f5d020 0%, #f53803 74%);
+        border-radius: 1.75em;
+        background-color: red;
         box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);
         font-weight: 600;
         color: white;
@@ -176,20 +178,20 @@
 .main-container{  
         background-image:  linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)),url("{% static 'logo.png'%}");  
     }
-    tr{
-            border-bottom: 1px solid orange;
-            
-    }
-    th{
-            padding: 1em;
-            font-size: 1.2em;
-            text-align: center;
-    }
-    .leftnavigation_bar{
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
-            background-color: rgba(255, 255, 255, 0.9) ;
+tr{
+        border-bottom: 1px solid orange;
+        
+}
+th{
+        padding: 1em;
+        font-size: 1.2em;
+        text-align: center;
+}
+.leftnavigation_bar{
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+        background-color: rgba(255, 255, 255, 0.9) ;
 
-    }
+}
  </style>
  <p class="alert">Item added to user cart</p>
   <div class="row mt-2" style="position: relative;z-index: 5;">
@@ -227,13 +229,20 @@
                                                         <div  class="col-sm-4" >
                                                                 <div class="card-content"  onclick="detailvalue(this)" >
                                                                         <h4 id="lefttext" ><span style="margin-left: 5px;">{{one.product_id.Productname}}</span></h4>
-                                                                        <img class="rounded" src="{{ one.product_id.product_mage.url }}" alt="Oh no image!" >
+                                                                        <div class="row cardcolumn">
+                                                                                <div class="col-sm-8">
+                                                                                        <img class="rounded" src="{{ one.product_id.product_mage.url }}" alt="Oh no image!" >
+                                                                                </div>
+                                                                                <div class="col-sm-4 buttoncolumn">
+                                                                                        <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();deletecart(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                                                        <button class="btn btn-sm btn-outline-dark"  onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')" onclick="event.stopPropagation();  createorder(this)"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                                                                                </div>
+                                                                        </div>
                                                                         <h2 class="price" >Rs.{{one.product_id.price }}</h2>
                                                                         <p class="description" >{{one.product_id.Description}}</p>
                                                                         <p class='product_id'style="display:none">{{one.product_id.Id}}</p>
                                                                         <p class='cart_id'style="display:none;">{{one.cart_id}}</p>
-                                                                        <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();deletecart(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                                                        <button class="btn btn-sm btn-outline-dark"  onmouseover="addcontent(this,'Buy')" onmouseout="removecontent(this,'Buy')" onclick="event.stopPropagation();  createorder(this)"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                                                                        
                                                                 </div>         
                                                         </div>
                                                         
@@ -251,14 +260,21 @@
                                                         <div  class="col-sm-4" >
                                                                 <div class="card-content"  onclick="detailvalue(this)" >
                                                                         <h4 id="lefttext" ><span style="margin-left: 5px;">{{one.product_id.Productname}}</span></h4>
-                                                                        <img class="rounded" src="{{ one.product_id.product_mage.url }}" alt="Oh no image!" >
+                                                                        <div class="row cardcolumn">
+                                                                                <div class="col-sm-8">
+                                                                                        <img class="rounded" src="{{ one.product_id.product_mage.url }}" alt="Oh no image!" >
+                                                                                </div>
+                                                                                <div class="col-sm-4 buttoncolumn">
+                                                                                        <button class="btn btn-sm btn-outline-dark"  onmouseover="addcontent(this,'Sell')" onmouseout="removecontent(this,'Buy')" onclick="event.stopPropagation();sellproduct(this)"><i class="fas fa-money-check-alt fa-2x "></i></button>
+                                                                                </div>
+                                                                        </div>
                                                                         <h2 class="price" >Rs.{{one.product_id.price }}</h2>
                                                                         <p class="description" >{{one.product_id.Description}}</p>
                                                                         <p class='product_id'style="display:none">{{one.product_id.Id}}</p>
                                                                         <p class='cart_id order_id'style="display:none;">{{one.order_id}}</p>
                                                                         <p class='request_username'style="display:none;">{{one.user_id.username}}</p>
-                                                                        <button class="btn btn-sm btn-outline-dark"  onmouseover="addcontent(this,'Sell')" onmouseout="removecontent(this,'Buy')" onclick="event.stopPropagation();sellproduct(this)"><i class="fas fa-money-check-alt fa-2x "></i></button>
-                                                                        <a style="display: block; margin-top: 15px;" href="User/{{one.user_id.id}}/">Requested-User ->{{ one.user_id.first_name }}</a>
+                                                                        <a style="display: block;transform: scale(1.05);position: absolute;right: 2.5em;top: 1.75em;" href="User/{{one.user_id.id}}/"><i class="fas fa-info-circle fa-2x"></i></a>
+
                                                                 </div>         
                                                         </div>
                                                 
@@ -277,14 +293,20 @@
                                                         <div  class="col-sm-4" >
                                                                 <div class="card-content"  onclick="detailvalue(this)" >
                                                                         <h4 id="lefttext" ><span style="margin-left: 5px;">{{one.Productname}}</span></h4>
-                                                                        <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!" >
+                                                                        <div class="row cardcolumn">
+                                                                                <div class="col-sm-8">
+                                                                                        <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!" >
+                                                                                </div>
+                                                                                <div class="col-sm-4 buttoncolumn">
+                                                                                        <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Product')" onclick="event.stopPropagation();Removeproduct(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                                                </div>
+                                                                        </div>
                                                                         <h2 class="price" >Rs.{{one.price }}</h2>
                                                                         <p class="description">{{one.Description}}</p>
                                                                         <p class='product_id'style="display:none">{{one.Id}}</p>
                                                                         {% if one.Id|getRequestBadge != 0 %}
                                                                                 <p class="badge">{{one.Id|getRequestBadge}}</p>
                                                                         {% endif %}
-                                                                        <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Product')" onclick="event.stopPropagation();Removeproduct(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
                                                                 </div>
                                                         </div>
                                                 {% empty %}
@@ -300,14 +322,21 @@
                                                         <div  class="col-sm-4" >
                                                                 <div class="card-content"  onclick="detailvalue(this)" >
                                                                         <h4 id="lefttext" ><span style="margin-left: 5px;">{{one.product_id.Productname}}</span></h4>
-                                                                        <img class="rounded" src="{{ one.product_id.product_mage.url }}" alt="Oh no image!" >
+                                                                        <div class="row cardcolumn">
+                                                                                <div class="col-sm-8">
+                                                                                        <img class="rounded" src="{{ one.product_id.product_mage.url }}" alt="Oh no image!" >
+                                                                                </div>
+                                                                                <div class="col-sm-4 buttoncolumn">
+                                                                                        {% if one.order_id|getOrderStatus == 'True' %}
+                                                                                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cancel')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();cancelorder(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                                                        {% endif %}                                                                                
+                                                                                </div>
+                                                                        </div>
                                                                         <h2 class="price" >Rs.{{one.product_id.price }}</h2>
                                                                         <p class="description" >{{one.product_id.Description}}</p>
                                                                         <p class='product_id'style="display:none">{{one.product_id.Id}}</p>
                                                                         <p class='cart_id order_id'style="display:none;">{{one.order_id}}</p>
-                                                                        {% if one.order_id|getOrderStatus == 'True' %}
-                                                                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cancel')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();cancelorder(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
-                                                                        {% endif %}
+                                                                        
                                                                 </div>         
                                                         </div>
                                                 
@@ -379,13 +408,18 @@
                 $(".columns").fadeIn(1000);
                 if (localStorage.getItem('cart_page')!=null){
                         $("#"+localStorage.getItem('cart_page')).css({
-                           'background-color':'#fbb034',
-                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                            'background-color':'#fbb034',
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)',
+                            'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
+                            'border-color': 'white' 
                         })
                 }else{
                     $("#opt1").css({
                            'background-color':'#fbb034',
-                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)'
+                            'background-image':'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%)',
+                            'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
+                            'border-color': 'white'
+
                         })
                 }
 
@@ -404,11 +438,12 @@
                         else if(previousOperation === "cancelOrder"){
                                 message="order has been cancelled and added to cart";
                         }else{
-                                sellProduct
-                                message="Item sold to perticular user successfully";
+                                if(previousOperation === 'sellProduct')
+                                        message="Item sold to perticular user successfully";
                         }
                         localStorage.setItem('previousOperation',null)
-                        getMessage(message);
+                        if(message != null)
+                                getMessage(message);
                 }
 
         }
@@ -446,8 +481,8 @@
         }
 
         function deletecart(ptr){
-                var cid = $(ptr).parent('.card-content').find('.cart_id').text()
-                var pid = $(ptr).parent('.card-content').find('.product_id').text()
+                var cid = $(ptr).parents('.card-content').find('.cart_id').text()
+                var pid = $(ptr).parents('.card-content').find('.product_id').text()
                 if(confirm("Are you Sure you want to remove product from cart")){
                 $.ajax({
                         url: "{% url 'cart_remove' %}",
@@ -491,7 +526,7 @@
                         url: "{% url 'remove_product' %}",
                         type: "POST",
                         headers : {"X-CSRFToken":'{{ csrf_token }}'},
-                        data : {"product_id":$(ptr).parent('.card-content').find('.product_id').text()},
+                        data : {"product_id":$(ptr).parents('.card-content').find('.product_id').text()},
                         success : function name(params){
                                 localStorage.setItem("previousOperation","removeProduct");
                                 window.location="{% url 'cart_view' %}"                  
@@ -510,8 +545,8 @@
                         type: "POST",
                         headers : {"X-CSRFToken":'{{ csrf_token }}'},
                         data : {
-                                "product_id":$(ptr).parent('.card-content').find('.product_id').text(),
-                                "cart_id":$(ptr).parent('.card-content').find('.cart_id').text()
+                                "product_id":$(ptr).parents('.card-content').find('.product_id').text(),
+                                "cart_id":$(ptr).parents('.card-content').find('.cart_id').text()
                                 },
                         success : function name(params){
                                 localStorage.setItem("previousOperation","createOrder");
@@ -533,8 +568,8 @@
                         type: "POST",
                         headers : {"X-CSRFToken":'{{ csrf_token }}'},
                         data : {
-                                "order_id":$(ptr).parent('.card-content').find('.order_id').text(),
-                                "product_id":$(ptr).parent('.card-content').find('.product_id').text(),
+                                "order_id":$(ptr).parents('.card-content').find('.order_id').text(),
+                                "product_id":$(ptr).parents('.card-content').find('.product_id').text(),
                                 },
                         success : function name(params){
                                 localStorage.setItem("previousOperation","cancelOrder");
@@ -549,14 +584,14 @@
         function sellproduct(ptr){
                 //  Code to buy a product
                 //  at backend 1. remove product , 2. update order table and set status to done
-                username = $(ptr).parent('.card-content').find('.request_username').text();
+                username = $(ptr).parents('.card-content').find('.request_username').text();
                 if(confirm("Are you Sure you want to sell this product to "+username)){
                 $.ajax({
                         url: "{% url 'product_sold' %}",
                         type: "POST",
                         headers : {"X-CSRFToken":'{{ csrf_token }}'},
-                        data : {"product_id":$(ptr).parent('.card-content').find('.product_id').text(),
-                                "order_id":$(ptr).parent('.card-content').find('.order_id').text()
+                        data : {"product_id":$(ptr).parents('.card-content').find('.product_id').text(),
+                                "order_id":$(ptr).parents('.card-content').find('.order_id').text()
                                 },
                         success : function name(params){
                                 localStorage.setItem("previousOperation","sellProduct");
