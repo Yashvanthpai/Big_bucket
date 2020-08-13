@@ -232,7 +232,7 @@ th{
             </div>
            <div class="col-sm-10">
                     <div class="container-fluid" id="top-container" >
-                        <h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Inventory</span></h1>
+                        <h1 style="height: 30px;line-height: 30px;"><span class="ml-5 dashbordheading" style="font-family: 'Yeon Sung', cursive;">Inventory</span></h1>
                         <div class="pagination mb-4" style="color: black; width:150px; margin: auto;text-align: center;background-color: white;">
                                         <span class="step-links">                                     
                                                 <span class="current btn  btn-outline-dark btn-sm" style="width:150px;height: 30px;">
@@ -318,7 +318,11 @@ th{
                                                                                         <img class="rounded" src="{{ one.product_mage.url }}" alt="Oh no image!" >
                                                                                 </div>
                                                                                 <div class="col-sm-4 buttoncolumn">
-                                                                                        <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Product')" onclick="event.stopPropagation();Removeproduct(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                                                        {% if one.status != "sold" %}
+                                                                                                <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Remove')" onmouseout="removecontent(this,'Product')" onclick="event.stopPropagation();Removeproduct(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                                                        {% else %}
+                                                                                                <p style="color: rgb(6, 128, 228);"><i class="far fa-check-circle fa-2x mr-1"></i>Sold</p>
+                                                                                        {% endif %}
                                                                                 </div>
                                                                         </div>
                                                                         <h2 class="price" >Rs.{{one.price }}</h2>
@@ -349,6 +353,8 @@ th{
                                                                                 <div class="col-sm-4 buttoncolumn">
                                                                                         {% if one.order_id|getOrderStatus == 'True' %}
                                                                                                 <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cancel')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();cancelorder(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                                                        {% else %}
+                                                                                                <p style="color: green;"><i class="far fa-check-circle fa-2x"></i>Dilevered</p>
                                                                                         {% endif %}                                                                                
                                                                                 </div>
                                                                         </div>
@@ -426,6 +432,7 @@ th{
 <script>
         $(document).ready(function(){
                 $(".columns").fadeIn(1000);
+                var heading=null
                 if (localStorage.getItem('cart_page')!=null){
                         $("#"+localStorage.getItem('cart_page')).css({
                             'background-color':'#fbb034',
@@ -433,6 +440,7 @@ th{
                             'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
                             'border-color': 'white' 
                         })
+                        heading = $("#"+localStorage.getItem('cart_page')).text()
                 }else{
                     $("#opt1").css({
                            'background-color':'#fbb034',
@@ -441,7 +449,10 @@ th{
                             'border-color': 'white'
 
                         })
+                     heading =  $("#opt1").text()
+
                 }
+                $('.dashbordheading').text(heading)
 
                 if (localStorage.getItem('previousOperation')!=null){
                         var previousOperation = localStorage.getItem('previousOperation');

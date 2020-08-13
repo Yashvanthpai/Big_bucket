@@ -63,6 +63,8 @@ class Productform(forms.ModelForm):
           'Upload_date'  : forms.TextInput(attrs={'Placeholder':str(datetime.date(datetime.now())),'type': 'text','class': 'datepicker','autocomplete':"off"}),
           'Description': forms.Textarea(attrs={'cols':5,'rows':2})
         }
-    
+        labels={
+            'product_mage':"Product image"
+        }
     def save(self,userid):
         pass

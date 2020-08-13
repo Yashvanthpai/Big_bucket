@@ -150,9 +150,10 @@ def cart_view(request):
             
         
     elif cart_option =="Requested-Product":
-        obj = order.objects.filter(Q(product_id__username__username=request.user.username))
-        total_item = order.objects.filter(Q(product_id__username__username=request.user.username)).count()
-        total_amount = float(order.objects.filter(Q(product_id__username__username=request.user.username)).aggregate(Sum('product_id__price'))['product_id__price__sum'])
+        obj = order.objects.filter(Q(product_id__username__username=request.user.username) &
+        ~Q(product_id__status="sold"))
+        total_item = order.objects.filter(Q(product_id__username__username=request.user.username) & ~Q(product_id__status="sold")).count()
+        total_amount = float(order.objects.filter(Q(product_id__username__username=request.user.username) & ~Q(product_id__status="sold")).aggregate(Sum('product_id__price'))['product_id__price__sum'])
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -237,7 +238,7 @@ def sell_product(request):
     if request.method=="POST" and request.is_ajax():
         try:
             product_instance  = Product.objects.all().filter(Id=request.POST.get('product_id')).update(status='sold')
-            orderinstance = order.objects.get(order_id=request.POST.get('order_id')).update(status='sold')
+            orderinstance = order.objects.filter(order_id=request.POST.get('order_id')).update(status='sold')
             cartinstance = cart.objects.filter(product_id__Id=request.POST.get('product_id')).delete()
         except Exception as p:
             print(p)

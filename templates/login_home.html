@@ -180,7 +180,7 @@
     <div class="col-sm-2 leftnavigation_bar" style="border-right: 2px solid #fbb034;">
         <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">CATEGORY</h4>
         <ul id="catogorylist">
-            <li id='cat1' onclick="catogory(this)" value="All">All</li>
+            <li id='cat1' onclick="catogory(this)" value="All">All Product</li>
             <li id='cat2' onclick="catogory(this)" value="Stationary">Stationary</li>
             <li id='cat3' onclick="catogory(this)" value="Household_supplies">Household</li>
             <li id='cat4' onclick="catogory(this)" value="Furnitures">Furnitures</li>
@@ -191,12 +191,12 @@
         <hr>
         <h4 style="text-align: center; margin-top:25px;text-decoration: underline;">Navigation</h4>
         <ul id="catogorylist">
-            <li><a style="text-decoration: none;color:black;" href="{% url 'cart_view' %}">Inventry View</a></li>
+            <li onclick="viewcart()" value="Bags_and_Luggage">Inventry View</li>
         </ul>
     </div>
     <div class="col-sm-10 mt-3">
         <div class="container-fluid mb-1" id="top-container">
-            <h1 style="height: 30px;line-height: 30px;"><span class="ml-5" style="font-family: 'Yeon Sung', cursive;">Product List</span></h1>
+            <h1 style="height: 30px;line-height: 30px;"><span class="ml-5 dashbordheading" style="font-family: 'Yeon Sung', cursive;">Product List</span></h1>
 
             <div class="pagination mb-4" style="color: black; width:150px; margin: auto;text-align: center;background-color: white;">
                 <span class="step-links">                                     
@@ -217,7 +217,7 @@
                                                 </div>
                                                 <div class="col-sm-4 buttoncolumn">
                                                     {% if user.username|cartexistatnce:one.Id == 'True' %}
-                                                        <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'ToCart')" onmouseout="removecontent(this,'View Cart')" onclick="event.stopPropagation();viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
+                                                        <button class="btn btn-sm btn-outline-primary" onmouseover="addcontent(this,'InCart')" onmouseout="removecontent(this,'View Cart')" onclick="event.stopPropagation();viewcart()"><i class="fas fa-shopping-cart fa-2x "></i></button>
                                                     {% else %}
                                                         <button class="btn btn-sm btn-outline-dark" onmouseover="addcontent(this,'Cart')" onmouseout="removecontent(this,'Cart')" onclick="event.stopPropagation();addcartdata(this)"><i class="fas fa-shopping-cart fa-2x "></i></button>
                                                     {% endif%}
@@ -260,7 +260,7 @@
             <script>
                 $(document).ready(function() {
                     $(".columns").fadeIn(1000);
-                    
+                    var heading="All Product"
                     if (localStorage.getItem('ptr') != null) {
                         $("#" + localStorage.getItem('ptr')).css({
                            'background-color':'#fbb034',
@@ -268,6 +268,7 @@
                             'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
                             'border-color': 'white'
                         })
+                        heading = $("#" + localStorage.getItem('ptr')).text()
                     }else{
                         $("#cat1").css({
                             'background-color':'#fbb034',
@@ -275,8 +276,9 @@
                             'box-shadow':'0 4px 8px 0 rgba(0, 0, 0, .2), 0 6px 20px 0 rgba(0, 0, 0, .19)',
                             'border-color': 'white'
                             })
+                        
                     }
-                   
+                    $('.dashbordheading').text(heading)
 
                     if (localStorage.getItem('previousOperation')!=null){
                         var previousOperation = localStorage.getItem('previousOperation');
@@ -322,7 +324,6 @@
 
                 function addcartdata(ptr) {
                     var pid = $(ptr).parents('.card-content').find('.product_id').text()
-                    alert(pid)
                     $.ajax({
                         url: "{% url 'cartadd' %}",
                         type: "POST",
@@ -343,7 +344,7 @@
                 }
 
                 function viewcart() {
-                    localStorage.setItem("previousOperation",null);
+                    localStorage.setItem('previousOperation',null)
                     window.location = "{% url 'cart_view'%}"
                 }
 

@@ -29,7 +29,13 @@ class User_extends(models.Model):
     address = models.TextField()
     
 class Product(models.Model):
-    ch=(('Stationary','Stationary'),('Household_supplies','Household_supplies'),('Furnitures','Furnitures'),('Sport-item','Sport-item'),('Electronic-item','Electronic-item'),('Bags_and_Luggage','Bags_and_Luggage'))
+    ch=(
+    ('Stationary','Stationary'),
+    ('Household_supplies','Household_supplies'),
+    ('Furnitures','Furnitures'),
+    ('Sport-item','Sport-item'),
+    ('Electronic-item','Electronic-item'),
+    ('Bags_and_Luggage','Bags_and_Luggage'))
     Id = models.AutoField(primary_key =True)
     product_mage = models.ImageField(upload_to='product/',blank=True)
     username  = models.ForeignKey(AuthUser,db_column='username', blank=True, null=True,on_delete=models.CASCADE)
@@ -38,7 +44,7 @@ class Product(models.Model):
     Description = models.TextField()
     Upload_date = models.DateField()
     status = models.CharField(max_length=15,default="sell")
-    catogory = models.CharField(max_length=30,choices=ch,default='Books')
+    catogory = models.CharField(max_length=30,choices=ch,default='Stationary')
     payment_mode = models.CharField(max_length=20,choices=(('mode1',"Phone-pay"),('mode2','Google-pay'),('mode3','Paytm'),('mode4','Cash')),default='mode4')
     payment_qr = models.ImageField(upload_to='payment_mode/',blank=True,null=True)
 
