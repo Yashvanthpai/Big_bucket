@@ -118,7 +118,7 @@ def cart_view(request):
     if cart_option == "Cart":
         obj = cart.objects.filter(request_id__username=request.user.username)
         total_item = len(obj)
-        total_amount = float((cart.objects.filter(Q(request_id__username=request.user.username)).aggregate(Sum('product_id__price')))['product_id__price__sum'])
+        total_amount = float((obj.aggregate(Sum('product_id__price')))['product_id__price__sum'] or 0 ) 
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -129,12 +129,12 @@ def cart_view(request):
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
             total_item = len(obj)
-            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum']
+            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum'] or 0
 
     elif cart_option =="Posted-Product":
         obj = Product.objects.filter(username__username=request.user.username)
         total_item = len(obj)
-        total_amount = float(Product.objects.filter(Q(username__username=request.user.username)).aggregate(Sum('price'))['price__sum'])
+        total_amount = float(Product.objects.filter(Q(username__username=request.user.username)).aggregate(Sum('price'))['price__sum'] or 0)
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -146,14 +146,14 @@ def cart_view(request):
                     Q(Upload_date__icontains=querry)
                 ).distinct()
             total_item = len(obj)
-            total_amount = (obj.aggregate(Sum("price")))['price__sum']
+            total_amount = (obj.aggregate(Sum("price")))['price__sum'] or 0
             
         
     elif cart_option =="Requested-Product":
         obj = order.objects.filter(Q(product_id__username__username=request.user.username) &
         ~Q(product_id__status="sold"))
         total_item = order.objects.filter(Q(product_id__username__username=request.user.username) & ~Q(product_id__status="sold")).count()
-        total_amount = float(order.objects.filter(Q(product_id__username__username=request.user.username) & ~Q(product_id__status="sold")).aggregate(Sum('product_id__price'))['product_id__price__sum'])
+        total_amount = float(order.objects.filter(Q(product_id__username__username=request.user.username) & ~Q(product_id__status="sold")).aggregate(Sum('product_id__price'))['product_id__price__sum'] or 0)
         if request.GET.get('q'):
             querry = request.GET.get('q')
             obj = obj.filter(
@@ -164,12 +164,12 @@ def cart_view(request):
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
             total_item = len(obj)
-            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum']
+            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum'] or 0
 
     elif cart_option == "My-Orders":
         obj = order.objects.filter(Q(user_id__username=request.user.username))
         total_item = len(obj)
-        total_amount = float(order.objects.filter(Q(user_id__username=request.user.username)).aggregate(Sum('product_id__price'))['product_id__price__sum'])
+        total_amount = float(order.objects.filter(Q(user_id__username=request.user.username)).aggregate(Sum('product_id__price'))['product_id__price__sum'] or 0)
        
         if request.GET.get('q'):
             querry = request.GET.get('q')
@@ -181,7 +181,7 @@ def cart_view(request):
                     Q(product_id__Upload_date__icontains=querry)
                 ).distinct()
             total_item = len(obj)
-            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum']
+            total_amount = (obj.aggregate(Sum("product_id__price")))['product_id__price__sum'] or 0
 
     else:
         form = Productform()

@@ -16,11 +16,11 @@ class Userregistrtion(UserCreationForm):
         fields = ('username','first_name','last_name','email','password1','password2')
 
         labels={
-            'username': "Univercity Number"
+            'username': "University seat number"
         }
 
         widgets={
-            'username': forms.TextInput(attrs={'Placeholder':"Enter Univercity Seat Number"})
+            'username': forms.TextInput(attrs={'Placeholder':"Enter university seat number"})
         }
     
     def save(self,commit=True):
