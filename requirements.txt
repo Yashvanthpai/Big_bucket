@@ -1,5 +1,5 @@
 beautifulsoup4==4.8.1
-Django==2.2.6
+Django==2.2.22
 django-bootstrap4==1.0.1
 django-crispy-forms==1.8.0
 Pillow==6.2.1
